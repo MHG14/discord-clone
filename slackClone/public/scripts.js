@@ -16,22 +16,16 @@ socket.on("welcome", (data) => {
 });
 
 socket.on("nsList", (nsData) => {
-  console.log(nsData);
   const namespacesDiv = document.querySelector(".namespaces");
+  namespacesDiv.innerHTML = "";
   nsData.forEach((namespace) => {
     namespacesDiv.innerHTML += `<div class="namespace" ns="${namespace.endpoint}"><img src="${namespace.image}"></div>`;
   });
   Array.from(document.getElementsByClassName("namespace")).forEach((el) => {
     el.addEventListener("click", () => {
-      const clickedNamespace = nsData.find(
-        (ns) => ns.endpoint === el.getAttribute("ns")
-      );
-      const rooms = clickedNamespace.rooms;
-      let roomList = document.querySelector(".room-list");
-      roomList.innerHTML = "";
-      rooms.forEach((room) => {
-        roomList.innerHTML += `<li><span class="glyphicon glyphicon-lock"></span>${room.title}</li>`;
-      });
+      joinNs(el, nsData);
     });
   });
+
+  joinNs(document.getElementsByClassName("namespace")[0], nsData);
 });
